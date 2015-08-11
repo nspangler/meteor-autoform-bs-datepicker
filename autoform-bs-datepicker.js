@@ -19,7 +19,13 @@ AutoForm.addInputType("bootstrap-datepicker", {
       return val;
     },
     "number": function (val) {
-      return (val instanceof Date) ? val.getTime() : val;
+      if (val instanceof Date) {
+        // 'undo' the timezone offset (so we end up on the original date again)
+        val.setMinutes(val.getMinutes() + val.getTimezoneOffset());
+        return val.getTime();
+      } else {
+        return val;
+      }
     },
     "numberArray": function (val) {
       if (val instanceof Date) {
